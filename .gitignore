@@ -1,0 +1,12 @@
+# Python bytecode
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment
+env/
+venv/ 
+
+Todo.txt
+
+.env  
