@@ -44,6 +44,10 @@ INSTALLED_APPS = [
 
     #3th party packages 
     'rest_framework',
+
+    #myapps
+    'users',
+    'post',
 ]
 
 MIDDLEWARE = [
