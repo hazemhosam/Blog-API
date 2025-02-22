@@ -1,8 +1,10 @@
 from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView
 from rest_framework import permissions
+from rest_framework import status
+from rest_framework.response import Response
 
-from post.models import Post
-from post.serializers import PostSerializer, PostUpdateSerializer 
+from post.models import Comment, Post
+from post.serializers import CommentCreateSerializer, CommentSerializer, PostSerializer, PostUpdateSerializer 
 
 
 class PostListCreateView(ListCreateAPIView):
@@ -29,5 +31,31 @@ class PostDeatailView(RetrieveUpdateDestroyAPIView):
         if self.request.method in ['PUT','PATCH']:
             return PostUpdateSerializer
         return PostSerializer 
+    
+class CommentListCreateView(ListCreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes =  [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        return Comment.objects.filter(post_id = self.kwargs['post_pk'])
+    
+    def create(self, request, *args, **kwargs):
+        serializer = CommentCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(post_id=self.kwargs['post_pk'],user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+
+class CommentDeatailView(RetrieveUpdateDestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        return Comment.objects.filter(post_id = self.kwargs['post_pk'])
+
+
+     
+
+
         
 
