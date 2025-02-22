@@ -1,4 +1,4 @@
-from datetime import timezone
+from django.utils import timezone
 from django.conf import settings
 from django.db import models
 
@@ -12,26 +12,26 @@ class Post(models.Model):
 
     class Status(models.TextChoices):
         DRAFT = 'DR','Draft'
-        published = 'PH','Published' 
+        PUBLISHED = 'PB','Published' 
         
     
     title = models.CharField(max_length=255)
     body= models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,
                                related_name='posts')
-    published = models.DateTimeField(default=timezone.now)
+    publish = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=2,choices=Status.choices,
-                                           defualt=Status.DRAFT)
+                                           default=Status.DRAFT)
     
     objects = models.Manager()
     published = PublishedManger()
 
     class Meta:
-        orderin = ['-published']
+        ordering = ['-publish']
         indexes = [
-            models.Index(fields=['-published']),
+            models.Index(fields=['-publish']),
         ]
 
     def __str__(self):
