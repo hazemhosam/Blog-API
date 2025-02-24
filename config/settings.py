@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     #3th party packages 
     'rest_framework',
     'djoser',
+    'django_filters',
 
 
     #myapps

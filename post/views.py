@@ -1,8 +1,11 @@
 from rest_framework.generics import ListCreateAPIView , RetrieveUpdateDestroyAPIView
 from rest_framework import permissions
 from rest_framework import status
-from rest_framework.response import Response
+from rest_framework.response import Response 
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
+from .pagination import DefaultPagination
 from post.models import Comment, Post
 from post.serializers import CommentCreateSerializer, CommentSerializer, PostSerializer, PostUpdateSerializer 
 
@@ -10,6 +13,10 @@ from post.serializers import CommentCreateSerializer, CommentSerializer, PostSer
 class PostListCreateView(ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend,SearchFilter]
+    filterset_fields = ['author']  
+    search_fields = ['title','body']
+    pagination_class = DefaultPagination
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
