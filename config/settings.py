@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'django_filters',
+    'drf_yasg',
 
 
     #myapps
@@ -157,8 +158,18 @@ DJOSER = {
 }
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+   'AUTH_HEADER_TYPES': ('JWT','Bearer',),
    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+SWAGGER_SETTINGS = {
+'SECURITY_DEFINITIONS': {
+ 'Bearer':{
+    'type':'apiKey',
+    'name':'Authorization',
+    'in':'header'
+  }
+ }
 }
 
 
